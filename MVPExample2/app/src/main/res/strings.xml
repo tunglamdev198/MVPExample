@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">MVPExample</string>
+    <string name="label_login_underline"><u>Login</u></string>
+</resources>
