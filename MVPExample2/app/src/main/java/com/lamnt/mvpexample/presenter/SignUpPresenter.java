@@ -3,15 +3,16 @@ package com.lamnt.mvpexample.presenter;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.lamnt.mvpexample.database.entities.User;
-import com.lamnt.mvpexample.database.repository.UserRepository;
 import com.lamnt.mvpexample.presenter.contract.SignUpContract;
+import com.lamnt.mvpexample.presenter.impl.SignUpInteractorImpl;
 
 public class SignUpPresenter implements SignUpContract.Presenter {
     SignUpContract.View mView;
+    SignUpInteractor interactor;
 
     public void setView(SignUpContract.View mView) {
         this.mView = mView;
+        interactor = new SignUpInteractorImpl();
     }
 
     @Override
@@ -20,8 +21,11 @@ public class SignUpPresenter implements SignUpContract.Presenter {
             mView.registerFailed("Vui lòng nhập đủ thông tin");
             return;
         }
-        User user = new User(email, password, username);
-        UserRepository.getInstance(context).createUser(user);
-        mView.registerSuccess();
+        if (interactor.register(context, username, password, email)) {
+            mView.registerSuccess();
+        } else {
+            mView.registerFailed("Tài khoản này đã tồn tại");
+        }
+
     }
 }
